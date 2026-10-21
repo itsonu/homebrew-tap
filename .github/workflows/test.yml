@@ -1,0 +1,41 @@
+name: Test
+
+# Installs the cask and the formula from this checkout and runs them.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, macos-15-intel, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Homebrew (taps this checkout as itsonu/tap)
+        uses: Homebrew/actions/setup-homebrew@main
+      - name: Style
+        run: brew style itsonu/tap
+      - name: Desktop app (cask)
+        if: runner.os == 'macOS'
+        run: |
+          brew install --cask itsonu/tap/open-transfer
+          test -d "/Applications/Open Transfer.app"
+          codesign --verify --deep --strict "/Applications/Open Transfer.app"
+          brew uninstall --cask itsonu/tap/open-transfer
+      - name: Command-line app (formula)
+        run: |
+          # Releases before v3.2.5 have no Intel Mac command-line build.
+          if [ "$RUNNER_OS" = macOS ] && [ "$RUNNER_ARCH" = X64 ] && ! grep -q macos-x64-cli Formula/open-transfer.rb; then
+            echo "This release has no Intel Mac command-line build; skipping."; exit 0
+          fi
+          brew install itsonu/tap/open-transfer
+          brew test itsonu/tap/open-transfer
+          open-transfer --version

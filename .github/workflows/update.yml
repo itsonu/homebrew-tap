@@ -1,0 +1,51 @@
+name: Update to the latest release
+
+# Points the cask and the formula at Open Transfer's latest release and commits
+# the change. Runs a few times a day, by hand (Actions -> Run workflow), or when
+# open-transfer's release workflow sends a "release" repository_dispatch.
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag, e.g. v3.2.5 (empty = latest)"
+        required: false
+  repository_dispatch:
+    types: [release]
+
+permissions:
+  contents: write
+  actions: write  # to start the test workflow
+
+concurrency: update
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Point the cask and formula at the release
+        id: update
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.event.client_payload.tag }}
+        run: echo "version=$(python3 .github/scripts/update.py $TAG)" >> "$GITHUB_OUTPUT"
+      - name: Commit
+        id: commit
+        env:
+          VERSION: ${{ steps.update.outputs.version }}
+        run: |
+          if git diff --quiet; then echo "Already at $VERSION"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "open-transfer $VERSION"
+          git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+      # A push made with the workflow's own token doesn't start other workflows,
+      # so test the new version here.
+      - name: Test the new version
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run test.yml --ref "${GITHUB_REF_NAME}"
