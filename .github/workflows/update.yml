@@ -30,7 +30,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           TAG: ${{ inputs.tag || github.event.client_payload.tag }}
-        run: echo "version=$(python3 .github/scripts/update.py $TAG)" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(python3 .github/scripts/update.py "$TAG")" >> "$GITHUB_OUTPUT"
       - name: Commit
         id: commit
         env:

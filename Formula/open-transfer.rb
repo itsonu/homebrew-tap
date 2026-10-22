@@ -5,7 +5,7 @@ class OpenTransfer < Formula
   license "MIT"
 
   livecheck do
-    url "https://github.com/itsonu/open-transfer"
+    url :stable
     strategy :github_latest
   end
 
@@ -28,7 +28,7 @@ class OpenTransfer < Formula
   end
 
   service do
-    run [opt_bin/"open-transfer"]
+    run [opt_bin/"open-transfer", "--no-browser", "--no-qr"]
     keep_alive true
     log_path var/"log/open-transfer.log"
     error_log_path var/"log/open-transfer.log"

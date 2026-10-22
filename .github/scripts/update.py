@@ -94,7 +94,7 @@ class OpenTransfer < Formula
   license "MIT"
 
   livecheck do
-    url "https://github.com/itsonu/open-transfer"
+    url :stable
     strategy :github_latest
   end
 """
@@ -138,7 +138,7 @@ def formula(version: str, sums: dict[str, str]) -> str:
 
 
 def main() -> None:
-    tag = sys.argv[1] if len(sys.argv) > 1 else None
+    tag = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] else None
     path = f"tags/{tag}" if tag else "latest"
     release = json.loads(get(f"https://api.github.com/repos/{REPO}/releases/{path}"))
     version = release["tag_name"].removeprefix("v")
