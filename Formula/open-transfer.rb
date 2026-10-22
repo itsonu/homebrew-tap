@@ -1,7 +1,7 @@
 class OpenTransfer < Formula
   desc "Share files between nearby devices over Wi-Fi, like AirDrop"
   homepage "https://itsonu.github.io/open-transfer/"
-  version "3.2.5"
+  version "3.3.0"
   license "MIT"
 
   livecheck do
@@ -12,18 +12,18 @@ class OpenTransfer < Formula
   on_macos do
     on_arm do
       url "https://github.com/itsonu/open-transfer/releases/download/v#{version}/open-transfer-macos-arm64-cli.tar.gz"
-      sha256 "5bd2f7fbee5c800403572b3abe997eee6c75ee8e8783d13e8d3ba89fe60272e3"
+      sha256 "7f931d420a762a2d6968feefdc6d777ffb1ea0505a86b33bdde9299cb717b588"
     end
     on_intel do
       url "https://github.com/itsonu/open-transfer/releases/download/v#{version}/open-transfer-macos-x64-cli.tar.gz"
-      sha256 "5ce7835d568bb84d547d5891596485c564cd3ea3a55a3921bba4d6f06fbbbbb7"
+      sha256 "1ca7d7e6a9fe72531e54578c5cbf28b068f6d780a5ef376e3214fcf01b8eb7f7"
     end
   end
 
   on_linux do
     on_intel do
       url "https://github.com/itsonu/open-transfer/releases/download/v#{version}/open-transfer-linux-x64.tar.gz"
-      sha256 "01d5309cece25acb0431effd2b326e4a1a5d9d3c8f8cf64f0ecff9bd5d0467af"
+      sha256 "085fe06e508f27add80ebefd479c01192dcd5914d99092bbd1ec30954e88d630"
     end
   end
 
