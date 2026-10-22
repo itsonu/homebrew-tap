@@ -1,9 +1,9 @@
 cask "open-transfer" do
   arch arm: "arm64", intel: "x64"
 
-  version "3.2.4"
-  sha256 arm:   "11cb9dddf12567dc3bee15514871fb2a61f5c7faf5c370035a30e895562a6c62",
-         intel: "8e0632012656a57f0c110aaa7c0906eb1285a4e05868d43526239a14eb14ccf6"
+  version "3.2.5"
+  sha256 arm:   "389e07ce86aaeb9d84e67d36267b4e48d745f59185da37f6ba6e2e860a40d5b2",
+         intel: "b4dc6fcbb6e7b190d4db7fc6547148e8249c1b5a1e0ba9358abcf3e4399cd132"
 
   url "https://github.com/itsonu/open-transfer/releases/download/v#{version}/open-transfer-macos-#{arch}.dmg"
   name "Open Transfer"
